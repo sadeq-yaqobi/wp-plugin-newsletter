@@ -1,35 +1,37 @@
 <?php
-function nl_news_letter_email_layout($post, $logo_url = '') {
+function nl_news_letter_email_layout($post, $logo_url = '')
+{
 // Ensure $post is a valid WP_Post object
-if (empty($post) || !($post instanceof WP_Post)) {
-return "Invalid post data.";
-}
+    if (empty($post) || !($post instanceof WP_Post)) {
+        return "Invalid post data.";
+    }
 
 // Sanitize and retrieve necessary data
-$site_title = esc_html(get_bloginfo('name'));
-$permalink  = esc_url(get_permalink($post->ID));
-$post_title = esc_html($post->post_title);
+    $site_title = esc_html(get_bloginfo('name'));
+    $permalink = esc_url(get_permalink($post->ID));
+    $post_title = esc_html($post->post_title);
 
 // Handle logo display
-if (!empty($logo_url)) {
-$logo = '<img src="' . esc_url($logo_url) . '" alt="Logo">';
-} else {
-$logo = '<strong class="alternative_logo">' . $site_title . '</strong>';
-}
+    if (!empty($logo_url)) {
+        $logo = '<img src="' . esc_url($logo_url) . '" alt="Logo">';
+    } else {
+        $logo = '<strong class="alternative_logo">' . $site_title . '</strong>';
+    }
 
 // Handle thumbnail
-if (has_post_thumbnail($post->ID)) {
-$thumbnail = get_the_post_thumbnail($post->ID, [640, 427], ['class' => 'img-fluid','loading'=>'']);
-} else {
-$thumbnail = ''; // Fallback if no thumbnail exists
-}
-
+    if (has_post_thumbnail($post->ID)) {
+        $thumbnail = get_the_post_thumbnail($post->ID, [640, 427], ['class' => 'img-fluid', 'loading' => '']);
+    } else {
+        $thumbnail = ''; // Fallback if no thumbnail exists
+    }
+//handle unsubscribe query string
+    $unsubscribe_url = site_url('?unsubscribe=1');
 // Define font URLs
-$font_IRANSans_url  = esc_url(plugin_dir_url(__DIR__) . 'assets/fonts/IRANSansWeb/IRANSansWeb.ttf');
-$font_vazirmatn_url = esc_url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Vazirmatn:wght@100..900&display=swap');
+    $font_IRANSans_url = esc_url(plugin_dir_url(__DIR__) . 'assets/fonts/IRANSansWeb/IRANSansWeb.ttf');
+    $font_vazirmatn_url = esc_url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Vazirmatn:wght@100..900&display=swap');
 
 // Return the HTML layout
-return '
+    return '
 <!DOCTYPE html>
 <html lang="fa">
 <head>
@@ -146,7 +148,7 @@ return '
             <h2><a href="' . $permalink . '">' . $post_title . '</a></h2>
         </div>
         <div class="footer">
-            <a href="">لغو اشتراک</a>
+            <a href="'.$unsubscribe_url.'">لغو اشتراک</a>
         </div>
     </div>
 </section>
